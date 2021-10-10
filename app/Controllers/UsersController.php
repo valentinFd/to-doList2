@@ -11,7 +11,7 @@ class UsersController
     {
         if (empty($_SESSION["loggedIn"]))
         {
-            require_once("app/Views/index.template.php");
+            require_once("app/Views/index.template.html");
         }
         else
         {
@@ -37,7 +37,7 @@ class UsersController
     {
         if (empty($_SESSION["loggedIn"]))
         {
-            require_once("app/Views/register.template.php");
+            require_once("app/Views/register.template.html");
         }
         else
         {
