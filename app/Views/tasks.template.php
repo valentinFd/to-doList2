@@ -14,7 +14,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            To-Do List
+            Hello, <?= $_SESSION["user"] ?>!
         </div>
         <div class="col">
             <form method="post" action="/logOut">
@@ -22,6 +22,11 @@
                     <button type="submit" class="btn btn-primary">Log out</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            To-Do List
         </div>
     </div>
     <?php
@@ -51,6 +56,16 @@
             </form>
         </div>
     </div>
+    <?php
+    foreach ($_SESSION["errors"] as $error): ?>
+        <div class="row">
+            <div class="col">
+                <?= $error ?>
+            </div>
+        </div>
+        <?php
+        unset($_SESSION["errors"]);
+    endforeach ?>
 </div>
 </body>
 </html>

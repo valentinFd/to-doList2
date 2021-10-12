@@ -24,16 +24,20 @@
                     <input type="text" class="form-control w-50" id="password" name="password">
                 </div>
                 <div class="mb-3">
-                    <label for="repeatPassword" class="form-label">Repeat Password</label>
-                    <input type="text" class="form-control w-50" id="repeatPassword" name="repeatPassword">
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn btn-primary">Sign in</button>
                 </div>
             </form>
             <div class="mb-3">
-                <a href="/" class="btn btn-primary" role="button">Sign in</a>
+                <a href="/register" class="btn btn-primary" role="button">Register</a>
             </div>
+            <?php
+            foreach ($_SESSION["errors"] as $error): ?>
+                <div class="mb-3">
+                    <?= $error ?>
+                </div>
+                <?php
+                unset($_SESSION["errors"]);
+            endforeach ?>
         </div>
     </div>
 </div>

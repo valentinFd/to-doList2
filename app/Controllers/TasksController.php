@@ -9,7 +9,7 @@ class TasksController
 {
     public static function index(): void
     {
-        if (empty($_SESSION["loggedIn"])) header("Location: /");
+        if (empty($_SESSION["user"])) header("Location: /");
         $storage = new CSVTasksStorage("storages/tasks.csv");
         $tasks = $storage->getTasks();
         require_once("app/Views/tasks.template.php");
@@ -17,9 +17,23 @@ class TasksController
 
     public static function create(): void
     {
-        $storage = new CSVTasksStorage("storages/tasks.csv");
-        $storage->add(new Task($_POST["description"]));
-        header("Location: /tasks");
+        try
+        {
+            if (trim($_POST["description"]) === "")
+            {
+                throw new \Exception("Task description cannot be empty");
+            }
+            $storage = new CSVTasksStorage("storages/tasks.csv");
+            $storage->add(new Task($_POST["description"]));
+        }
+        catch (\Exception $e)
+        {
+            $_SESSION["errors"][] = $e->getMessage();
+        }
+        finally
+        {
+            header("Location: /tasks");
+        }
     }
 
     public static function delete(string $id): void
