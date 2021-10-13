@@ -38,6 +38,13 @@ switch ($routeInfo[0])
     case FastRoute\Dispatcher::FOUND:
         [$handler, $method] = explode("@", $routeInfo[1]);
         $vars = $routeInfo[2];
-        $handler::$method(...array_values($vars));
+        $response = $handler::$method(...array_values($vars));
+        if (is_a($response, "app\View"))
+        {
+            $loader = new \Twig\Loader\FilesystemLoader("app/Views");
+            $twig = new \Twig\Environment($loader);
+            echo $twig->render($response->getName(), $response->getArgs());
+            unset($_SESSION["errors"]);
+        }
         break;
 }
