@@ -4,19 +4,18 @@ namespace App\Controllers;
 
 use App\Models\User;
 use App\Storages\CSVUsersStorage;
+use App\View;
+use App\RegisterValidator;
 
 class UsersController
 {
-    public static function index(): void
+    public static function index(): View
     {
         if (empty($_SESSION["user"]))
         {
-            $loader = new \Twig\Loader\FilesystemLoader("app/Views");
-            $twig = new \Twig\Environment($loader);
-            echo $twig->render("index.template.html", [
+            return new View("index.template.html", [
                 "errors" => $_SESSION["errors"]
             ]);
-            unset($_SESSION["errors"]);
         }
         else
         {
@@ -35,23 +34,20 @@ class UsersController
                 header("Location: /tasks");
             }
         }
-        catch (\App\Exceptions\InputException $e)
+        catch (\App\Exceptions\LogInException $e)
         {
             $_SESSION["errors"][] = $e->getMessage();
             header("Location:/ ");
         }
     }
 
-    public static function register(): void
+    public static function register(): View
     {
         if (empty($_SESSION["user"]))
         {
-            $loader = new \Twig\Loader\FilesystemLoader("app/Views");
-            $twig = new \Twig\Environment($loader);
-            echo $twig->render("register.template.html", [
+            return new View("register.template.html", [
                 "errors" => $_SESSION["errors"]
             ]);
-            unset($_SESSION["errors"]);
         }
         else
         {
@@ -63,14 +59,17 @@ class UsersController
     {
         try
         {
-            $storage = new CSVUsersStorage("storages/users.csv");
-            $storage->add(new User($_POST["username"], $_POST["password"]));
-            header("Location: /");
+            $validator = new RegisterValidator();
+            if ($validator->validate($_POST))
+            {
+                $storage = new CSVUsersStorage("storages/users.csv");
+                $storage->add(new User($_POST["username"], $_POST["password"]));
+                header("Location: /");
+            }
         }
-        catch (\App\Exceptions\UsernameWhitespaceException | \App\Exceptions\EmptyPasswordException |
-        \App\Exceptions\UnmatchingPasswordsException | \LengthException $e)
+        catch (\App\Exceptions\RegisterValidationException $e)
         {
-            $_SESSION["errors"][] = $e->getMessage();
+            $_SESSION["errors"] = $validator->getErrors();
             header("Location: /register");
         }
     }
