@@ -4,22 +4,20 @@ namespace App\Controllers;
 
 use App\Models\Task;
 use App\Storages\CSVTasksStorage;
+use App\View;
 
 class TasksController
 {
-    public static function index(): void
+    public static function index(): View
     {
         if (empty($_SESSION["user"])) header("Location: /");
         $storage = new CSVTasksStorage("storages/tasks.csv");
         $tasks = $storage->getTasks();
-        $loader = new \Twig\Loader\FilesystemLoader("app/Views");
-        $twig = new \Twig\Environment($loader);
-        echo $twig->render("tasks.template.html", [
+        return new View("tasks.template.html", [
             "tasks" => $tasks,
             "user" => $_SESSION["user"],
             "errors" => $_SESSION["errors"]
         ]);
-        unset($_SESSION["errors"]);
     }
 
     public static function create(): void
