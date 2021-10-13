@@ -12,21 +12,24 @@ class TasksController
         if (empty($_SESSION["user"])) header("Location: /");
         $storage = new CSVTasksStorage("storages/tasks.csv");
         $tasks = $storage->getTasks();
-        require_once("app/Views/tasks.template.php");
+        $loader = new \Twig\Loader\FilesystemLoader("app/Views");
+        $twig = new \Twig\Environment($loader);
+        echo $twig->render("tasks.template.html", [
+            "tasks" => $tasks,
+            "user" => $_SESSION["user"],
+            "errors" => $_SESSION["errors"]
+        ]);
+        unset($_SESSION["errors"]);
     }
 
     public static function create(): void
     {
         try
         {
-            if (trim($_POST["description"]) === "")
-            {
-                throw new \Exception("Task description cannot be empty");
-            }
             $storage = new CSVTasksStorage("storages/tasks.csv");
             $storage->add(new Task($_POST["description"]));
         }
-        catch (\Exception $e)
+        catch (\LengthException $e)
         {
             $_SESSION["errors"][] = $e->getMessage();
         }

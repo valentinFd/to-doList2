@@ -14,7 +14,7 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            Hello, <?= $_SESSION["user"] ?>!
+            Hello, {{ user }}!
         </div>
         <div class="col">
             <form method="post" action="/logOut">
@@ -29,20 +29,18 @@
             To-Do List
         </div>
     </div>
-    <?php
-    foreach ($tasks as $id => $task):?>
-        <div class="row">
-            <div class="col">
-                <?= "$id. {$task->getDescription()}" ?>
-            </div>
-            <div class="col">
-                <form method="post" action="/tasks/delete/<?= $id ?>">
-                    <button type="submit" class="btn btn-primary">Delete</button>
-                </form>
-            </div>
+    {% for id, task in tasks %}
+    <div class="row">
+        <div class="col">
+            {{ id + 1 }}. {{ task.getDescription }}
         </div>
-    <?php
-    endforeach ?>
+        <div class="col">
+            <form method="post" action="/tasks/delete/{{ id }}">
+                <button type="submit" class="btn btn-primary">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
     <div class="row">
         <div class="col">
             <form method="post" action="/tasks">
@@ -56,16 +54,13 @@
             </form>
         </div>
     </div>
-    <?php
-    foreach ($_SESSION["errors"] as $error): ?>
-        <div class="row">
-            <div class="col">
-                <?= $error ?>
-            </div>
+    {% for error in errors %}
+    <div class="row">
+        <div class="col">
+            {{ error }}
         </div>
-        <?php
-        unset($_SESSION["errors"]);
-    endforeach ?>
+    </div>
+    {% endfor %}
 </div>
 </body>
 </html>

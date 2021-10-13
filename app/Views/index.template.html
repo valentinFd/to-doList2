@@ -30,16 +30,15 @@
             <div class="mb-3">
                 <a href="/register" class="btn btn-primary" role="button">Register</a>
             </div>
-            <?php
-            foreach ($_SESSION["errors"] as $error): ?>
-                <div class="mb-3">
-                    <?= $error ?>
-                </div>
-                <?php
-                unset($_SESSION["errors"]);
-            endforeach ?>
         </div>
     </div>
+    {% for error in errors %}
+    <div class="row">
+        <div class="col">
+            {{ error }}
+        </div>
+    </div>
+    {% endfor %}
 </div>
 </body>
 </html>

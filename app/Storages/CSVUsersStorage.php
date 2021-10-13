@@ -32,6 +32,6 @@ class CSVUsersStorage
         {
             if ($username === $record[0] && $password === $record[1]) return true;
         }
-        return false;
+        throw new \App\Exceptions\InputException("Incorrect username or password");
     }
 }

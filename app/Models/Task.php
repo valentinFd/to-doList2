@@ -13,6 +13,10 @@ class Task
 
     public function __construct(string $description)
     {
+        if (trim($description) === "")
+        {
+            throw new \LengthException("Task description cannot be empty");
+        }
         $this->description = $description;
     }
 }
