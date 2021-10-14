@@ -43,4 +43,32 @@ class TasksController
         $storage->delete($storage->searchById($id));
         header("Location: /tasks");
     }
+
+    public static function update(string $id): View
+    {
+        if (empty($_SESSION["user"])) header("Location: /");
+        $storage = new CSVTasksStorage("storages/tasks.csv");
+        $task = $storage->searchById($id);
+        return new View("update.template.html", [
+            "task" => $task,
+            "taskId" => $id,
+            "user" => $_SESSION["user"],
+            "errors" => $_SESSION["errors"]
+        ]);
+    }
+
+    public static function edit(string $id): void
+    {
+        try
+        {
+            $storage = new CSVTasksStorage("storages/tasks.csv");
+            $storage->edit($id, $_POST["description"]);
+            header("Location: /tasks");
+        }
+        catch (\LengthException $e)
+        {
+            $_SESSION["errors"][] = $e->getMessage();
+            header("Location: /tasks/update/$id");
+        }
+    }
 }

@@ -14,6 +14,8 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r)
     $r->addRoute("GET", "/tasks", "App\Controllers\TasksController@index");
     $r->addRoute("POST", "/tasks", "App\Controllers\TasksController@create");
     $r->addRoute("POST", "/tasks/delete/{id}", "App\Controllers\TasksController@delete");
+    $r->addRoute("GET", "/tasks/update/{id}", "App\Controllers\TasksController@update");
+    $r->addRoute("POST", "/tasks/update/{id}", "App\Controllers\TasksController@edit");
 });
 
 $httpMethod = $_SERVER["REQUEST_METHOD"];

@@ -26,35 +26,17 @@
     </div>
     <div class="row">
         <div class="col">
-            To-Do List
-        </div>
-    </div>
-    {% for id, task in tasks %}
-    <div class="row">
-        <div class="col">
-            {{ id + 1 }}. {{ task.getDescription }}
-        </div>
-        <div class="col">
-            <form method="get" action="/tasks/update/{{ id }}">
-                <button type="submit" class="btn btn-primary">Edit</button>
-            </form>
-        </div>
-        <div class="col">
-            <form method="post" action="/tasks/delete/{{ id }}">
-                <button type="submit" class="btn btn-primary">Delete</button>
-            </form>
-        </div>
-    </div>
-    {% endfor %}
-    <div class="row">
-        <div class="col">
-            <form method="post" action="/tasks">
+            <form method="post" action="/tasks/update/{{ taskId }}">
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <input type="text" class="form-control w-50" id="description" name="description">
+                    <input type="text" class="form-control w-50" id="description" name="description"
+                           value="{{ task.getDescription}}">
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </div>
+                <div class="mb-3">
+                    <a href="/tasks" class="btn btn-primary" role="button">Back</a>
                 </div>
             </form>
         </div>

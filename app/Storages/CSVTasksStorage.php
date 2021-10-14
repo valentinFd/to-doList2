@@ -57,6 +57,24 @@ class CSVTasksStorage
         }
     }
 
+    public function edit(string $id, string $description): void
+    {
+        $records = $this->getTasks();
+        foreach ($records as $recordId => $record)
+        {
+            if ($recordId == $id)
+            {
+                $record->setDescription($description);
+            }
+        }
+        $fileWrite = fopen($this->fileName, "w");
+        foreach ($records as $record)
+        {
+            fputcsv($fileWrite, (array)$record, ";");
+        }
+        fclose($fileWrite);
+    }
+
     public function getTasks(): array
     {
         $reader = Reader::createFromPath($this->fileName, "r");
